@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Generar número aleatorio</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lobster">
+
+    <style>
+
+        body {  
+    padding-bottom: 30px;
+    padding-top: 30px;
+    margin: auto;
+    width: 80%;
+    font-family: "Lobster", serif;
+    font-size: 1.4vw;
+    background-color: cornflowerblue;
+    }
+    
+    h1 {
+    margin: auto;
+    padding-top: 15px;
+    font-family: "Lobster", serif;
+    width: 50%;
+    text-align: center;
+    border-bottom: 0.5vw solid cornflowerblue;
+    border-radius: 40px;
+    border-width: 50%;
+    font-size: 200%;
+    margin-bottom: 20px;
+    }
+    
+    .dentro{
+    border-radius: 50px;    
+    width: auto;
+    text-align: center;
+    background-color: white;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 5px;
+    }
+    
+    .fuera{
+    padding: 10px;
+    margin: auto;
+    background-color: white;
+    box-shadow: 0 0 30px 10px #555;
+    border-radius: 50px;
+    
+    }
+    
+    button{
+    border-color: cornflowerblue;
+    border-width: 0.5vw;
+    margin-left: 30px;
+    }
+    input{
+    margin-right: 40px;
+    text-align: center;
+    }
+    .left{
+    float: left;
+    width: 15%;
+    height: auto;
+    margin-left: 20px;
+    }
+    .right{
+    float: right;
+    width: 15%;
+    height: auto;
+    margin-right: 20px;
+    }
+    img{
+    width: 23%;
+    height: auto;
+    }
+    #solucion{
+    font-size: 150%;
+    }
+    
+        
+</style>
+
+    <script>
+        //https://developer.mozilla.org/en-US/docs/Web/API/HTMLAudioElement
+
+function validador(min,max){
+    return ((min > max) || isNaN(min) || isNaN(max));   
+}
+    
+function aleatorio(min,max){
+    return Number(Math.floor( (Math.random()* (max-min+1)) ) + min); 
+}
+    
+function sonimag(val){
+    switch(val){
+        case 0:
+            document.getElementById("imagen").src="imagenes/cero.png";
+            mensaje.innerHTML = "Cero";
+            audio = new Audio("sonidos/cero.mp3");
+            audio.play();
+            break;
+        case 1:
+            document.getElementById("imagen").src="imagenes/uno.png";
+            mensaje.innerHTML = "Uno";
+            audio = new Audio("sonidos/uno.mp3");
+            audio.play();
+            break;            
+        case 2:
+            document.getElementById("imagen").src="imagenes/dos.png";
+            mensaje.innerHTML = "Dos";
+            audio = new Audio("sonidos/dos.mp3");
+            audio.play();
+            break;
+        case 3:
+            document.getElementById("imagen").src="imagenes/tres.png";
+            mensaje.innerHTML = "Tres";
+            audio = new Audio("sonidos/tres.mp3");
+            audio.play();
+            break;
+        case 4:
+            document.getElementById("imagen").src="imagenes/cuatro.png";
+            mensaje.innerHTML = "Cuatro";
+            audio = new Audio("sonidos/cuatro.mp3");
+            audio.play();
+            break;
+        case 5:
+            document.getElementById("imagen").src="imagenes/cinco.png";
+            mensaje.innerHTML = "Cinco";
+            audio = new Audio("sonidos/cinco.mp3");
+            audio.play();
+            break;
+        case 6:
+            document.getElementById("imagen").src="imagenes/seis.png";
+            mensaje.innerHTML = "Seis";
+            audio = new Audio("sonidos/seis.mp3");
+            audio.play();
+            break;
+        case 7:
+            document.getElementById("imagen").src="imagenes/siete.png";
+            mensaje.innerHTML = "Siete";
+            audio = new Audio("sonidos/siete.mp3");
+            audio.play();
+            break;
+        case 8:
+            document.getElementById("imagen").src="imagenes/ocho.png";
+            mensaje.innerHTML = "Ocho";
+            audio = new Audio("sonidos/ocho.mp3");
+            audio.play();
+            break;
+        case 9:
+            document.getElementById("imagen").src="imagenes/nueve.png";
+            mensaje.innerHTML = "Nueve";
+            audio = new Audio("sonidos/nueve.mp3");
+            audio.play();
+            break;
+        case 10:
+            document.getElementById("imagen").src="imagenes/diez.png";
+            mensaje.innerHTML = "Diez";
+            audio = new Audio("sonidos/diez.mp3");
+            audio.play();
+            break;
+        default:
+            document.getElementById("imagen").src="imagenes/numeros.png";
+            mensaje.innerHTML = "Números";
+            audio = new Audio("sonidos/numeros.mp3");
+            audio.play();
+            break;
+    }
+}
+    
+function error(){
+        document.getElementById("min").value = "";
+        document.getElementById("max").value = "";
+        mensaje.innerHTML = "Valor incorrecto o mínimo > máximo";
+        document.getElementById("imagen").src="imagenes/error.png";
+        audio = new Audio("sonidos/error.mp3");
+        audio.play(); 
+}
+    
+    
+function generatodo(){
+    var mini = Number(document.getElementById("min").value);
+    var maxi = Number(document.getElementById("max").value);
+    mensaje = document.getElementById("solucion");
+    var random = 0;
+    console.log(mini,maxi);
+        if (validador(mini,maxi)){error()}
+        else 
+        {random = aleatorio(mini,maxi);
+        sonimag(random);
+        }    
+}
+
+</script>
+</head>
+
+<body>
+    <div class="fuera">
+        <img class="left" src="imagenes/dados.png" alt="dados">
+        <img class="right" src="imagenes/dados.png" alt="dados">
+        <h1>Generar número aleatorio</h1>
+        <div class="dentro">
+            <p>Introduzca el rango de valores</p>
+            <p>Mínimo: <input type="text" id="min" size="2" />Máximo: <input type="text" id="max" size="2" /><button onclick="generatodo()">Generar número</button></p>
+            <p id="solucion"><br></p>
+            <div><img id='imagen' src="imagenes/numeros.png" alt="Imagen de los números"></div>
+        </div>
+    </div>
+</body>
+
+</html>
