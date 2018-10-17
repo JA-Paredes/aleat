@@ -7,27 +7,32 @@
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lobster">
 
-    <style>
-
-        body {  
+<style>
+/* CSS sencillo, que no está muy cargado y pensando sobre todo en diseño sencillo, elegante y responsive. Cuando se abre la página desde un móvil y se pone
+en modo landscape (móvil en horizontal), la página entra justa, no hay que subir ni que bajar. Para ir testeando mientras lo iba haciendo, utilizé
+la siguiente extensión de Chrome:
+        
+        https://chrome.google.com/webstore/detail/responsive-web-design-tes/bdpelkpfhjfiacjeobkhlkkgaphbobea
+        
+Permite ir ajustando la ventana a los dispositivos móviles más comunes y comprobar la visualización de la página.*/     
+    
+    body {  
     padding-bottom: 30px;
     padding-top: 30px;
     margin: auto;
     width: 80%;
     font-family: "Lobster", serif;
-    font-size: 1.4vw;
+    font-size: 1.75vw;
     background-color: cornflowerblue;
     }
     
     h1 {
     margin: auto;
-    padding-top: 15px;
     font-family: "Lobster", serif;
     width: 50%;
     text-align: center;
     border-bottom: 0.5vw solid cornflowerblue;
     border-radius: 40px;
-    border-width: 50%;
     font-size: 200%;
     margin-bottom: 20px;
     }
@@ -39,7 +44,6 @@
     background-color: white;
     padding-left: 20px;
     padding-right: 20px;
-    padding-top: 5px;
     }
     
     .fuera{
@@ -48,7 +52,6 @@
     background-color: white;
     box-shadow: 0 0 30px 10px #555;
     border-radius: 50px;
-    
     }
     
     button{
@@ -56,26 +59,31 @@
     border-width: 0.5vw;
     margin-left: 30px;
     }
+        
     input{
     margin-right: 40px;
     text-align: center;
     }
+        
     .left{
     float: left;
     width: 15%;
     height: auto;
     margin-left: 20px;
     }
+        
     .right{
     float: right;
     width: 15%;
     height: auto;
     margin-right: 20px;
     }
+        
     img{
     width: 23%;
     height: auto;
     }
+    
     #solucion{
     font-size: 150%;
     }
@@ -83,18 +91,50 @@
         
 </style>
 
-    <script>
-        //https://developer.mozilla.org/en-US/docs/Web/API/HTMLAudioElement
+<script>
+/* El código se ha intentado hacer lo más modular posible, con 5 funciones.
 
+Para utilizar los sonidos, seguí las indicaciones recogidas en:
+
+    https://developer.mozilla.org/en-US/docs/Web/API/HTMLAudioElement
+        
+Como son sonidos cortos, no había necesidad de introducir un elemento audio para manipularlos.*/
+    
+/* Comprueba ambos de los requisitos que se pedían, que el valor sea un número y que el mínimo > máximo. Devuelve True si los valores no son válidos.
+Podría haber comprobado los requisitos por separado, pero quería probar a utilizar este tipo de función corta que devuelve True directamente vista en clase.*/
+    
 function validador(min,max){
     return ((min > max) || isNaN(min) || isNaN(max));   
 }
-    
+
+//Función muy simple, devuelve el número aleatorio
 function aleatorio(min,max){
     return Number(Math.floor( (Math.random()* (max-min+1)) ) + min); 
 }
     
+/* Esta función se ocupa de representar las diferentes soluciones. Al principio se hizo con un switch, pero este método es mucho más eficiente.
+Como sólo varía entre los casos un sólo fragmento repetidas veces, se ahorran todas las repeticiones del switch mediante un array y el valor
+aleatorio asociado a la posición, cambiando en cada caso a la solución correspondiente. */
+    
 function sonimag(val){
+    var numeros=["cero","uno","dos","tres","cuatro","cinco","seis","siete","ocho","nueve","diez"];
+    if (val >= 0 && val <=10) {
+            imagen.src="imagenes/" + numeros[val] + ".png";
+            imagen.alt="Imagen del número " + numeros[val].substring(0,1).toUpperCase() + numeros[val].substring(1); 
+            mensaje.innerHTML = numeros[val].substring(0,1).toUpperCase() + numeros[val].substring(1);
+            audio = new Audio("sonidos/" + numeros[val] + ".mp3");
+            audio.play();
+    } else {
+            imagen.src="imagenes/numeros.png";
+            imagen.alt="Imagen de números fuera de rango"
+            mensaje.innerHTML = "Números";
+            audio = new Audio("sonidos/numeros.mp3");
+            audio.play();
+    }
+    
+    /* Dejo el switch para que conste y se vea como se repite lo mismo todo el rato siendo el cambio muy pequeño entre cada case,
+    pero vaya, con el array de arriba se hace mucho mejor y más rápido
+    
     switch(val){
         case 0:
             document.getElementById("imagen").src="imagenes/cero.png";
@@ -169,22 +209,32 @@ function sonimag(val){
             audio.play();
             break;
     }
+    */
 }
+    
+/* Muestra los errores. Se activa cuando la función validador es True (no se cumplen las condiciones).
+Los dos primeros document.get.. sirven para vaciar los campos introducidos por el usuario, ya que si da error
+es más cómodo que se quiten solos. */
     
 function error(){
         document.getElementById("min").value = "";
         document.getElementById("max").value = "";
         mensaje.innerHTML = "Valor incorrecto o mínimo > máximo";
-        document.getElementById("imagen").src="imagenes/error.png";
+        imagen.src="imagenes/error.png";
+        imagen.alt="Imagen de error"
         audio = new Audio("sonidos/error.mp3");
         audio.play(); 
 }
     
+/* Función principal, es la única a la que el usuario llama activamente mediante el button. Esta función se encarga
+de llamar a las otras cuatro cuando es necesario.
+Las variables mensaje e imagen son globales puesto que no tienen var, para que las demás funciones puedan usarlas también. */
     
 function generatodo(){
     var mini = Number(document.getElementById("min").value);
     var maxi = Number(document.getElementById("max").value);
     mensaje = document.getElementById("solucion");
+    imagen = document.getElementById("imagen");
     var random = 0;
     console.log(mini,maxi);
         if (validador(mini,maxi)){error()}
@@ -198,6 +248,11 @@ function generatodo(){
 </head>
 
 <body>
+
+<!--HTML muy sencillo, con dos Divs que se encargan de dar la forma principal a la página
+Los elementos donde se reflejan las soluciones al generar el número son un <p> y un <img>, con las ids "solucion" e "imagen" respectivamente.
+La forma de llamar a la función principal generatodo() es con un evento onclick en el elemento <button>.-->
+   
     <div class="fuera">
         <img class="left" src="imagenes/dados.png" alt="dados">
         <img class="right" src="imagenes/dados.png" alt="dados">
@@ -206,7 +261,7 @@ function generatodo(){
             <p>Introduzca el rango de valores</p>
             <p>Mínimo: <input type="text" id="min" size="2" />Máximo: <input type="text" id="max" size="2" /><button onclick="generatodo()">Generar número</button></p>
             <p id="solucion"><br></p>
-            <div><img id='imagen' src="imagenes/numeros.png" alt="Imagen de los números"></div>
+            <div><img id='imagen' src="imagenes/numeros.png" alt="Imagen de números fuera de rango"></div>
         </div>
     </div>
 </body>
